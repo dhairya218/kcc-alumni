@@ -23,7 +23,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "@/components/ui/use-toast";
 import { FileUploader } from "@/components/register/FileUploader";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -311,7 +310,6 @@ export default function ProfileEditModal({ isOpen, onClose, profileData }: Profi
                         <Button 
                           type="button" 
                           variant="ghost" 
-                          size="sm"
                           onClick={() => removeWorkExperience(index)}
                         >
                           Remove
@@ -349,22 +347,21 @@ export default function ProfileEditModal({ isOpen, onClose, profileData }: Profi
                       />
                     </div>
                     
-                    <FormField
-                      control={form.control}
-                      name={`workExperience.${index}.duration`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Duration</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="e.g., 2020-2022 or 2023-Present" 
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`workExperience.${index}.duration`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Duration</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     
                     <FormField
                       control={form.control}
@@ -373,11 +370,7 @@ export default function ProfileEditModal({ isOpen, onClose, profileData }: Profi
                         <FormItem>
                           <FormLabel>Description</FormLabel>
                           <FormControl>
-                            <Textarea 
-                              rows={3}
-                              placeholder="Briefly describe your role and responsibilities" 
-                              {...field}
-                            />
+                            <Textarea rows={4} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -386,59 +379,33 @@ export default function ProfileEditModal({ isOpen, onClose, profileData }: Profi
                   </div>
                 ))}
                 
-                <Button 
-                  type="button" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={addWorkExperience}
+                  className="w-full"
                 >
                   Add Work Experience
                 </Button>
               </TabsContent>
             </Tabs>
             
-            <DialogFooter className="flex justify-between items-center">
-              <div className="flex space-x-2">
-                {activeTab !== "personal" && (
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => {
-                      const tabs = ["personal", "social", "experience"];
-                      const currentIndex = tabs.indexOf(activeTab);
-                      setActiveTab(tabs[currentIndex - 1]);
-                    }}
-                  >
-                    Previous
-                  </Button>
-                )}
-                
-                {activeTab !== "experience" && (
-                  <Button 
-                    type="button" 
-                    onClick={() => {
-                      const tabs = ["personal", "social", "experience"];
-                      const currentIndex = tabs.indexOf(activeTab);
-                      setActiveTab(tabs[currentIndex + 1]);
-                    }}
-                  >
-                    Next
-                  </Button>
-                )}
-              </div>
-              
-              <div className="flex space-x-2">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={onClose}
-                >
-                  Cancel
-                </Button>
-                
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Saving..." : "Save changes"}
-                </Button>
-              </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="mr-2"
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                isLoading={isLoading}
+              >
+                Save Changes
+              </Button>
             </DialogFooter>
           </form>
         </Form>
